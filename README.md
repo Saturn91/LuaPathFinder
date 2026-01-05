@@ -176,7 +176,7 @@ local PathFinder = require("PathFinder")
 Add as a git submodule:
 
 ```bash
-git submodule add https://github.com/yourusername/LuaPathFinder.git lib/LuaPathFinder
+git submodule add https://github.com/Saturn91/LuaPathFinder.git lib/LuaPathFinder
 ```
 
 Then require it in your code:
