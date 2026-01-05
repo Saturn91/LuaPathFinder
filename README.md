@@ -20,7 +20,7 @@ A lightweight pathfinding library for Lua, providing Dijkstra map generation and
 
 1. Clone this repository:
 ```bash
-git clone https://github.com/yourusername/LuaPathFinder.git
+git clone https://github.com/Saturn91/LuaPathFinder.git
 cd LuaPathFinder
 ```
 
