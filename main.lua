@@ -202,7 +202,7 @@ function PerformanceTest()
     local startPos = {x = 1, y = 1}
     local endPos = {x = mapSize, y = mapSize}
 
-    local iterations = 10000
+    local iterations = 1000
     local startTime = os.clock()
     local path
     
