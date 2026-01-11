@@ -82,7 +82,9 @@ function DrawDijkstraMap(dist, map)
         local line = ""
         for x = 1, #map do
             local d = dist[x][y]
-            if not map[x][y] then
+            if type(d) == "string" then
+                line = line .. d .. " "
+            elseif not map[x][y] then
                 line = line .. "| "
             elseif d == math.huge then
                 line = line .. ". "
@@ -178,6 +180,66 @@ function DrawPathWithObstacles()
     DrawDijkstraMap(dist, map)
 end
 
+function PerformanceTest()
+    local mapSize = 40
+    local map = {}
+    for x = 1, mapSize do
+        map[x] = {}
+        for y = 1, mapSize do
+            map[x][y] = true  -- all walkable
+        end
+    end
+
+    -- block random positions
+    math.randomseed(os.time())
+    for i = 1, mapSize-1 do
+        local x = math.random(1, mapSize)
+        local y = math.random(1, mapSize)
+        map[x][y] = false
+    end
+
+
+    local startPos = {x = 1, y = 1}
+    local endPos = {x = mapSize, y = mapSize}
+
+    local iterations = 10000
+    local startTime = os.clock()
+    local path
+    
+    for i = 1, iterations do
+        path = PathFinder.moveOne(map, startPos, endPos)
+    end
+
+    local endTime = os.clock()
+    local elapsed = endTime - startTime
+    
+    -- Draw the last found path
+    print("\nLast path from (" .. startPos.x .. "," .. startPos.y .. ") to (" .. endPos.x .. "," .. endPos.y .. "):")
+    for _, step in ipairs(path) do
+        print("(" .. step.x .. "," .. step.y .. ")")
+    end
+    
+    local dist = {}
+    for x = 1, mapSize do
+        dist[x] = {}
+        for y = 1, mapSize do
+            dist[x][y] = math.huge
+            if x == endPos.x and y == endPos.y then
+                dist[x][y] = "x"
+            end
+        end
+    end
+
+    for _, step in ipairs(path) do
+        dist[step.x][step.y] = "*"
+    end
+
+    DrawDijkstraMap(dist, map)
+
+    print("Performed " .. iterations .. " pathfinding operations on a " .. mapSize .. "x" .. mapSize .. " map in " .. elapsed .. " seconds.")
+    print("Average time per iteration: " .. (elapsed / iterations / 1000) .. "ms.")
+end
+
 print("Simple 11x11 Dijkstra Map:\n")
 Simple11x11DijkstraMap()
 
@@ -192,3 +254,6 @@ print("\n")
 DrawSimplePath()
 print("\n")
 DrawPathWithObstacles()
+
+print("\n--- Performance Test ---\n")
+PerformanceTest()
